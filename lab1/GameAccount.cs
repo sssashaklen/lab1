@@ -1,47 +1,41 @@
 ﻿namespace lab1
 {
-    public class GameAccount
+    public abstract class GameAccount
     {
-        private int _currentrating = 1;
-        public string UserName { get; private set; }
-        
+        private int _currentRating = 1;
+        public string? UserName { get; protected set; }
+
         public int CurrentRating
         {
-            get { return _currentrating; }
+            get { return _currentRating; }
             set
             {
                 if (value <= 0)
                 {
-                    _currentrating = 1;
+                    _currentRating = 1;
                 }
                 else
                 {
-                    _currentrating = value;
+                    _currentRating = value;
                 }
             }
         }
-        public GameAccount(string userName)
+
+        protected GameAccount(string? userName)
         {
             UserName = userName;
-
         }
+
         public int GameCount => gameHistory.Count;
 
-        private List<GameHistory> gameHistory = new List<GameHistory>();
+        public List<GameHistory> gameHistory = new List<GameHistory>();
+        
+        protected int consecutiveWins = 0; 
+        protected const int bonusPointsPerWin = 5; 
 
-        public void WinGame(string opponentName, int rating, int gameIndex) 
-        {
-            CurrentRating += rating;
-            gameHistory.Add(new GameHistory(opponentName, "Win", rating, gameIndex)); 
-        }
-
-        public void LoseGame(string opponentName, int rating, int gameIndex) 
-        {
-            CurrentRating -= rating;
-            gameHistory.Add(new GameHistory(opponentName, "Lose", rating, gameIndex)); 
-        }
-
-      
+        public abstract void WinGame(string? opponentName, int rating, int gameIndex);
+        
+        public abstract void LoseGame(string? opponentName, int rating, int gameIndex);
 
         public void GetStats()
         {
@@ -56,6 +50,11 @@
 
             Console.WriteLine("-------------------------------------------------");
             Console.WriteLine($"Current Rating: {CurrentRating}, Total Games Played: {GameCount}");
+        }
+        
+        protected void ResetConsecutiveWins() 
+        {
+            consecutiveWins = 0; 
         }
     }
 }

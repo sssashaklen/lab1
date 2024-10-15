@@ -1,28 +1,20 @@
 ﻿namespace lab1
 {
-    public class Game
+    public abstract class Game
     { 
-        private static int globalGameIndex = 0;
-        private static int GetNextGameIndex()
+        protected GameAccount? Player1 { get; }
+        protected GameAccount? Player2 { get; }
+        protected static int GlobalGameIndex = 0;
+        public abstract bool IsTrainingGame();
+        protected Game(GameAccount? player1, GameAccount? player2)
         {
-            return ++globalGameIndex;
+            Player1 = player1;
+            Player2 = player2;
         }
-        public static void ImitationGame(GameAccount player1, GameAccount player2, int rating)
+        protected  static int GetNextGameIndex()
         {
-            int result = new Random().Next(0, 2);
-            
-            int gameIndex = GetNextGameIndex(); 
-
-            if (result == 0)
-            {
-                player1.WinGame(player2.UserName, rating, gameIndex); 
-                player2.LoseGame(player1.UserName, rating, gameIndex); 
-            }
-            else
-            {
-                player2.WinGame(player1.UserName, rating, gameIndex); 
-                player1.LoseGame(player2.UserName, rating, gameIndex); 
-            }
+            return ++GlobalGameIndex;
         }
+        public abstract void ImitationGame(GameAccount? player1, GameAccount? player2, int rating);
     }
 }
