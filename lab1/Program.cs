@@ -95,18 +95,20 @@ namespace lab1
                                 {
                                     Console.WriteLine("Please enter a valid positive number.");
                                 }
-
-                                Console.WriteLine("Enter the rating for each game:");
-                                int rating;
-                                while (!int.TryParse(Console.ReadLine(), out rating) || rating <= 0)
+                                int rating=0;
+                                if (!isTrainingGame)
                                 {
-                                    Console.WriteLine("Please enter a valid positive rating.");
+                                    Console.WriteLine("Enter the rating for each game:");
+                                    while (!int.TryParse(Console.ReadLine(), out rating) || rating <= 0)
+                                    {
+                                        Console.WriteLine("Please enter a valid positive rating.");
+                                    }
                                 }
 
                                 Console.WriteLine("\nStarting games ...");
                                 for (int i = 0; i < numberOfGames; i++)
                                 {
-                                    game.ImitationGame(account1, account2, rating); // Виклик методу ImitationGame
+                                    game.ImitationGame(account1, account2, rating,isTrainingGame); 
                                 }
 
                                 Console.WriteLine("\nFinal player stats after all games:");

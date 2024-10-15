@@ -5,12 +5,12 @@
         private int _consecutiveWins; 
         private const int BonusThreshold = 3; 
         private const int BonusPoints = 2;
-
-        public override void WinGame(string? opponentName, int rating, int gameIndex)
+        
+        public override void WinGame(string? opponentName, int rating, int gameIndex,bool isTrainingGame)
         {
-            if (Game.IsTrainingGame()) 
+            if (isTrainingGame) 
             {
-                rating = 1; 
+                rating = 0; 
             }
             else
             {
@@ -25,8 +25,7 @@
             CurrentRating += rating; 
             gameHistory.Add(entry); 
         }
-
-        public override void LoseGame(string? opponentName, int rating, int gameIndex)
+        public override void LoseGame(string? opponentName, int rating, int gameIndex,bool isTrainingGame)
         {
             _consecutiveWins = 0; 
             var entry = new GameHistory(opponentName, "Lose", rating, gameIndex);

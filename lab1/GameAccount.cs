@@ -30,12 +30,10 @@
 
         public List<GameHistory> gameHistory = new List<GameHistory>();
         
-        protected int consecutiveWins = 0; 
-        protected const int bonusPointsPerWin = 5; 
-
-        public abstract void WinGame(string? opponentName, int rating, int gameIndex);
         
-        public abstract void LoseGame(string? opponentName, int rating, int gameIndex);
+        public abstract void WinGame(string? opponentName, int rating, int gameIndex,bool isTrainingGame);
+        
+        public abstract void LoseGame(string? opponentName, int rating, int gameIndex,bool isTrainingGame);
 
         public void GetStats()
         {
@@ -51,10 +49,6 @@
             Console.WriteLine("-------------------------------------------------");
             Console.WriteLine($"Current Rating: {CurrentRating}, Total Games Played: {GameCount}");
         }
-        
-        protected void ResetConsecutiveWins() 
-        {
-            consecutiveWins = 0; 
-        }
+
     }
 }

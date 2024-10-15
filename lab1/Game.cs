@@ -5,7 +5,7 @@
         protected GameAccount? Player1 { get; }
         protected GameAccount? Player2 { get; }
         protected static int GlobalGameIndex = 0;
-        public abstract bool IsTrainingGame();
+       
         protected Game(GameAccount? player1, GameAccount? player2)
         {
             Player1 = player1;
@@ -15,6 +15,6 @@
         {
             return ++GlobalGameIndex;
         }
-        public abstract void ImitationGame(GameAccount? player1, GameAccount? player2, int rating);
+        public abstract void ImitationGame(GameAccount? player1, GameAccount? player2, int rating,bool isTrainingGame);
     }
 }
