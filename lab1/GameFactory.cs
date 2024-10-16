@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Serialization;
-
-namespace lab1
+﻿namespace lab1
 {
     public static class GameFactory
     {

@@ -1,15 +1,9 @@
 ﻿namespace lab1
 {
-    public abstract class Game
+    public abstract class Game(string player1Name, string player2Name)
     {
         private static int _globalGameIndex;
-        private readonly string _player1Name;
-        private readonly string _player2Name;
-        protected Game(string player1Name, string player2Name)
-        {
-            _player1Name = player1Name;
-            _player2Name = player2Name;
-        }
+
         public int GetNextGameIndex()
         {
             return ++_globalGameIndex;
@@ -22,7 +16,7 @@
         }
         public string GetOpponentName(GameAccount player)
         {
-            return player.UserName == _player1Name ? _player2Name : _player1Name;
+            return player.UserName == player1Name ? player2Name : player1Name;
         }
 
     }

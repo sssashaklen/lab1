@@ -8,7 +8,7 @@
         public int CurrentRating
         {
             get => _currentRating;
-            set => _currentRating = value <= 0 ? 1 : value;
+            protected set => _currentRating = value <= 0 ? 1 : value;
         }
 
         private int GameCount => GameHistory.Count;
