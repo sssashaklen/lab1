@@ -2,34 +2,45 @@
 {
     public class PremiumGameAccount(string userName) : GameAccount(userName)
     {
-        private int _consecutiveWins; 
-        private const int BonusThreshold = 3; 
+        private int _consecutiveWins;
+        private const int BonusThreshold = 3;
         private const int BonusPoints = 2;
-        
-        public override void WinGame(string? opponentName, int rating, int gameIndex,bool isTrainingGame)
+
+        public override void WinGame(Game? game, int gameIndex, bool isTrainingGame)
         {
-            if (isTrainingGame) 
+            if (game != null)
             {
-                rating = 0; 
-            }
-            else
-            {
-                _consecutiveWins++;
-                if (_consecutiveWins >= BonusThreshold)
+                string opponentName = game.GetOpponentName(this);
+                int rating = game.GetRating(this); 
+                if (!isTrainingGame)
                 {
-                    rating += BonusPoints; 
+                    _consecutiveWins++;
+                    if (_consecutiveWins >= BonusThreshold)
+                    {
+                        rating += (BonusPoints+5); 
+                    }
+                    else
+                    {
+                        rating += 5; 
+                    }
                 }
+                CurrentRating = rating;
+                var entry = new GameHistory(opponentName, "Win", CurrentRating, gameIndex); 
+                GameHistory.Add(entry); 
             }
-            
-            var entry = new GameHistory(opponentName, "Win", rating, gameIndex);
-            CurrentRating += rating; 
-            gameHistory.Add(entry); 
         }
-        public override void LoseGame(string? opponentName, int rating, int gameIndex,bool isTrainingGame)
+        
+        public override void LoseGame(Game? game, int gameIndex, bool isTrainingGame)
         {
-            _consecutiveWins = 0; 
-            var entry = new GameHistory(opponentName, "Lose", rating, gameIndex);
-            gameHistory.Add(entry); 
+            if (game != null)
+            {
+                string opponentName = game.GetOpponentName(this);
+                int rating = game.GetRating(this); 
+                _consecutiveWins = 0;
+                CurrentRating = rating;
+                var entry = new GameHistory(opponentName, "Lose", CurrentRating, gameIndex);
+                GameHistory.Add(entry);
+            }
         }
     }
 }

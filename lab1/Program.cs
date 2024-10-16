@@ -28,9 +28,8 @@ namespace lab1
             {
                 Console.WriteLine("Choose an option:\n1. Add a new account\n2. Start a game\n3. Exit");
                 string? input = Console.ReadLine();
-                int choice;
 
-                if (int.TryParse(input, out choice))
+                if (int.TryParse(input, out var choice))
                 {
                     switch (choice)
                     {
@@ -85,34 +84,20 @@ namespace lab1
                                     Console.WriteLine("Invalid choice, please try again.");
                                 }
                                 
-                                bool isTrainingGame = (gameChoice == 2);
-
-                                Game game = GameFactory.CreateGame(gameChoice, account1, account2);
-
                                 Console.WriteLine("How many games would you like to simulate?");
                                 int numberOfGames;
                                 while (!int.TryParse(Console.ReadLine(), out numberOfGames) || numberOfGames <= 0)
                                 {
                                     Console.WriteLine("Please enter a valid positive number.");
-                                }
-                                int rating=0;
-                                if (!isTrainingGame)
+                                } 
+                                GameFactory.CreateGames(gameChoice, account1, account2, numberOfGames);
+                                if (account1 != null)
                                 {
-                                    Console.WriteLine("Enter the rating for each game:");
-                                    while (!int.TryParse(Console.ReadLine(), out rating) || rating <= 0)
-                                    {
-                                        Console.WriteLine("Please enter a valid positive rating.");
-                                    }
+                                    if (account2 != null)
+                                        Console.WriteLine("\nFinal player stats after all games:");
+                                    account1.GetStats();
                                 }
 
-                                Console.WriteLine("\nStarting games ...");
-                                for (int i = 0; i < numberOfGames; i++)
-                                {
-                                    game.ImitationGame(account1, account2, rating,isTrainingGame); 
-                                }
-
-                                Console.WriteLine("\nFinal player stats after all games:");
-                                account1?.GetStats();
                                 account2?.GetStats();
                             }
 

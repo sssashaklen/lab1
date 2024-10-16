@@ -1,47 +1,30 @@
 ﻿namespace lab1
 {
-    public abstract class GameAccount
+    public abstract class GameAccount(string? userName)
     {
         private int _currentRating = 1;
-        public string? UserName { get; protected set; }
+        public string? UserName { get; protected set; } = userName;
 
         public int CurrentRating
         {
-            get { return _currentRating; }
-            set
-            {
-                if (value <= 0)
-                {
-                    _currentRating = 1;
-                }
-                else
-                {
-                    _currentRating = value;
-                }
-            }
+            get => _currentRating;
+            set => _currentRating = value <= 0 ? 1 : value;
         }
 
-        protected GameAccount(string? userName)
-        {
-            UserName = userName;
-        }
-
-        public int GameCount => gameHistory.Count;
-
-        public List<GameHistory> gameHistory = new List<GameHistory>();
+        private int GameCount => GameHistory.Count;
+        protected readonly List<GameHistory> GameHistory = new List<GameHistory>();
         
         
-        public abstract void WinGame(string? opponentName, int rating, int gameIndex,bool isTrainingGame);
+        public abstract void WinGame(Game? game, int gameIndex, bool isTrainingGame);
+        public abstract void LoseGame(Game? game, int gameIndex,bool isTrainingGame);
         
-        public abstract void LoseGame(string? opponentName, int rating, int gameIndex,bool isTrainingGame);
-
         public void GetStats()
         {
             Console.WriteLine($"\nStats for {UserName}:");
             Console.WriteLine("-------------------------------------------------");
             Console.WriteLine("| Game Index | Opponent      | Result | Rating  |");
             Console.WriteLine("-------------------------------------------------");
-            foreach (var entry in gameHistory)
+            foreach (var entry in GameHistory)
             {
                 Console.WriteLine($"| {entry.GameIndex,-11} | {entry.OpponentName,-12} | {entry.Result,-6} | {entry.Rating,-7} |");
             }
