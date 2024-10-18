@@ -1,22 +1,21 @@
 ﻿namespace lab1
 {
-    public abstract class GameAccount(string? userName)
+    public abstract class GameAccount(string userName)
     {
         private int _currentRating = 1;
-        public string? UserName { get; protected set; } = userName;
+        public string UserName { get; protected set; } = userName;
 
         public int CurrentRating
         {
             get => _currentRating;
-            protected set => _currentRating = value <= 0 ? 1 : value;
+            protected set => _currentRating = Math.Max(value, 1);
         }
-
         private int GameCount => GameHistory.Count;
-        protected readonly List<GameHistory> GameHistory = new List<GameHistory>();
+        protected readonly List<GameHistory> GameHistory = new();
         
         
-        public abstract void WinGame(Game? game, int gameIndex, bool isTrainingGame);
-        public abstract void LoseGame(Game? game, int gameIndex,bool isTrainingGame);
+        public abstract void WinGame(Game game, int gameIndex,int rating);
+        public abstract void LoseGame(Game game, int gameIndex,int rating);
         
         public void GetStats()
         {

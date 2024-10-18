@@ -2,12 +2,12 @@ namespace lab1
 {
     public class Program
     {
-        static GameAccount? SelectPlayer(List<GameAccount?> accounts, string prompt)
+        static GameAccount SelectPlayer(List<GameAccount> accounts, string prompt)
         {
             Console.WriteLine(prompt);
             for (int i = 0; i < accounts.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {accounts[i]?.UserName}");
+                Console.WriteLine($"{i + 1}. {accounts[i].UserName}");
             }
 
             int index;
@@ -21,13 +21,13 @@ namespace lab1
 
         public static void Main(string[] args)
         {
-            List<GameAccount?> accounts = new List<GameAccount?>();
+            List<GameAccount> accounts = new List<GameAccount>();
             bool continuePlaying = true;
 
             while (continuePlaying)
             {
                 Console.WriteLine("Choose an option:\n1. Add a new account\n2. Start a game\n3. Exit");
-                string? input = Console.ReadLine();
+                string input = Console.ReadLine();
 
                 if (int.TryParse(input, out var choice))
                 {
@@ -36,7 +36,7 @@ namespace lab1
                         case 1:
                             Console.WriteLine("Adding new account:");
                             Console.WriteLine("Enter username:");
-                            string? username = Console.ReadLine();
+                            string username = Console.ReadLine();
 
                             Console.WriteLine("Select account type:\n1. Premium\n2. Base");
                             int accountType;
@@ -45,10 +45,10 @@ namespace lab1
                                 Console.WriteLine("Invalid choice, please try again.");
                             }
 
-                            GameAccount? newAccount = null;
+                            GameAccount newAccount;
                             if (accountType == 1)
                             {
-                                if (username != null) newAccount = new PremiumGameAccount(username);
+                                newAccount = new PremiumGameAccount(username);
                             }
                             else
                             {
@@ -67,8 +67,8 @@ namespace lab1
                             }
                             else
                             {
-                                GameAccount? account1 = SelectPlayer(accounts, "Select the first player:");
-                                GameAccount? account2 = SelectPlayer(accounts, "Select the second player (must be different):");
+                                GameAccount account1 = SelectPlayer(accounts, "Select the first player:");
+                                GameAccount account2 = SelectPlayer(accounts, "Select the second player (must be different):");
                                 Console.Clear();
 
                                 while (account1 == account2)
@@ -91,14 +91,9 @@ namespace lab1
                                     Console.WriteLine("Please enter a valid positive number.");
                                 } 
                                 GameFactory.CreateGames(gameChoice, account1, account2, numberOfGames);
-                                if (account1 != null)
-                                {
-                                    if (account2 != null)
-                                        Console.WriteLine("\nFinal player stats after all games:");
-                                    account1.GetStats();
-                                }
-
-                                account2?.GetStats();
+                                Console.WriteLine("\nFinal player stats after all games:");
+                                account1.GetStats();
+                                account2.GetStats();
                             }
 
                             break;
