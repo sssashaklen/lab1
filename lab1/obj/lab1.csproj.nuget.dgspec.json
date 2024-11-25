@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sashaklen\\RiderProjects\\lab1\\lab1\\lab1.csproj": {}
+    "C:\\Users\\sasha\\RiderProjects\\lab2\\lab1\\lab1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sashaklen\\RiderProjects\\lab1\\lab1\\lab1.csproj": {
+    "C:\\Users\\sasha\\RiderProjects\\lab2\\lab1\\lab1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sashaklen\\RiderProjects\\lab1\\lab1\\lab1.csproj",
+        "projectUniqueName": "C:\\Users\\sasha\\RiderProjects\\lab2\\lab1\\lab1.csproj",
         "projectName": "lab1",
-        "projectPath": "C:\\Users\\sashaklen\\RiderProjects\\lab1\\lab1\\lab1.csproj",
-        "packagesPath": "C:\\Users\\sashaklen\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sashaklen\\RiderProjects\\lab1\\lab1\\obj\\",
+        "projectPath": "C:\\Users\\sasha\\RiderProjects\\lab2\\lab1\\lab1.csproj",
+        "packagesPath": "C:\\Users\\sasha\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\sasha\\RiderProjects\\lab2\\lab1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\sashaklen\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\sasha\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -75,7 +80,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\sashaklen\\.dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\sasha\\.dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -2,7 +2,7 @@ namespace lab1
 {
     public class Program
     {
-        static GameAccount SelectPlayer(List<GameAccount> accounts, string prompt)
+        public static GameAccount SelectPlayer(List<GameAccount> accounts, string prompt)
         {
             Console.WriteLine(prompt);
             for (int i = 0; i < accounts.Count; i++)
@@ -19,100 +19,66 @@ namespace lab1
             return accounts[index - 1];
         }
 
-        public static void Main(string[] args)
+   public static void Main(string[] args)
         {
-            List<GameAccount> accounts = new List<GameAccount>();
+            DbContext db = new DbContext();
+
+            GameRepository gameRepository = new GameRepository(db);
+            GameServices gameServices = new GameServices(gameRepository);
+
+            GameAccountRepository accountRepository = new GameAccountRepository(db);
+            GameAccountServices accountServices = new GameAccountServices(accountRepository);
+
             bool continuePlaying = true;
 
             while (continuePlaying)
             {
-                Console.WriteLine("Choose an option:\n1. Add a new account\n2. Start a game\n3. Exit");
+                Console.WriteLine("\nChoose an option:");
+                Console.WriteLine("1. Add a new player");
+                Console.WriteLine("2. Show all players");
+                Console.WriteLine("3. Get player statistics");
+                Console.WriteLine("4. Start a game");
+                Console.WriteLine("5. Get all games statistics");
+                Console.WriteLine("6. Exit");
+
                 string input = Console.ReadLine();
 
-                if (int.TryParse(input, out var choice))
+                ICommand command = input switch
                 {
-                    switch (choice)
+                    "1" => new AddPlayerCommand(accountServices),
+                    "2" => new ShowPlayersCommand(accountServices),
+                    "3" => new GetStatsCommand(accountServices,gameServices),
+                    "4" => new PlayGameCommand(accountServices, gameServices),
+                    "5" => new GetStatsGamesCommand(gameServices),
+                    "6" => null,
+                    _ => null
+                };
+
+                if (command == null)
+                {
+                    if (input == "6")
                     {
-                        case 1:
-                            Console.WriteLine("Adding new account:");
-                            Console.WriteLine("Enter username:");
-                            string username = Console.ReadLine();
-
-                            Console.WriteLine("Select account type:\n1. Premium\n2. Base");
-                            int accountType;
-                            while (!int.TryParse(Console.ReadLine(), out accountType) || (accountType < 1 || accountType > 2))
-                            {
-                                Console.WriteLine("Invalid choice, please try again.");
-                            }
-
-                            GameAccount newAccount;
-                            if (accountType == 1)
-                            {
-                                newAccount = new PremiumGameAccount(username);
-                            }
-                            else
-                            {
-                                newAccount = new BaseGameAccount(username);
-                            }
-
-                            accounts.Add(newAccount);
-                            Console.WriteLine($"Account for {username} has been created as a {(accountType == 1 ? "Premium" : "Base")} account.");
-                            break;
-
-                        case 2:
-                            Console.Clear();
-                            if (accounts.Count < 2)
-                            {
-                                Console.WriteLine("At least two accounts are required to start a game.");
-                            }
-                            else
-                            {
-                                GameAccount account1 = SelectPlayer(accounts, "Select the first player:");
-                                GameAccount account2 = SelectPlayer(accounts, "Select the second player (must be different):");
-                                Console.Clear();
-
-                                while (account1 == account2)
-                                {
-                                    Console.WriteLine("Second player must be different from the first player. Try again.");
-                                    account2 = SelectPlayer(accounts, "Select the second player (must be different):");
-                                }
-
-                                Console.WriteLine("Choose the type of game:\n1. Base Game\n2. Training Game");
-                                int gameChoice;
-                                while (!int.TryParse(Console.ReadLine(), out gameChoice) || (gameChoice < 1 || gameChoice > 2))
-                                {
-                                    Console.WriteLine("Invalid choice, please try again.");
-                                }
-                                
-                                Console.WriteLine("How many games would you like to simulate?");
-                                int numberOfGames;
-                                while (!int.TryParse(Console.ReadLine(), out numberOfGames) || numberOfGames <= 0)
-                                {
-                                    Console.WriteLine("Please enter a valid positive number.");
-                                } 
-                                GameFactory.CreateGames(gameChoice, account1, account2, numberOfGames);
-                                Console.WriteLine("\nFinal player stats after all games:");
-                                account1.GetStats();
-                                account2.GetStats();
-                            }
-
-                            break;
-
-                        case 3:
-                            Console.WriteLine("Goodbye!");
-                            continuePlaying = false;
-                            break;
-
-                        default:
-                            Console.WriteLine("Invalid option, try again.");
-                            break;
+                        Console.WriteLine("Goodbye!");
+                        continuePlaying = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid option, please try again.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Please enter a valid number.");
+                    try
+                    {
+                        command.Execute();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"An error occurred: {ex.Message}");
+                    }
                 }
             }
         }
+        }
     }
-}
+

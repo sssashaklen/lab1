@@ -1,36 +1,48 @@
 ﻿namespace lab1
 {
-    public abstract class GameAccount(string userName)
+    public abstract class GameAccount(string userName, int id)
     {
         private int _currentRating = 1;
-        public string UserName { get; protected set; } = userName;
+        public string UserName { get; set; } = userName;
+        public int Id { get; protected set; } = id;
+        private static int _globalId=1;
+
+        public static int GetNextId()
+        {
+            return _globalId++;
+        }
 
         public int CurrentRating
         {
             get => _currentRating;
-            protected set => _currentRating = Math.Max(value, 1);
+            set => _currentRating = Math.Max(value, 1);
         }
-        private int GameCount => GameHistory.Count;
-        protected readonly List<GameHistory> GameHistory = new();
         
+        public abstract void WinGame(int rating);
+        public abstract void LoseGame(int rating);
         
-        public abstract void WinGame(Game game, int gameIndex,int rating);
-        public abstract void LoseGame(Game game, int gameIndex,int rating);
-        
-        public void GetStats()
+        public void GetStats(GameServices gameService)
         {
-            Console.WriteLine($"\nStats for {UserName}:");
-            Console.WriteLine("-------------------------------------------------");
-            Console.WriteLine("| Game Index | Opponent      | Result | Rating  |");
-            Console.WriteLine("-------------------------------------------------");
-            foreach (var entry in GameHistory)
+            Console.WriteLine($"\n=== Game History for {UserName} ===");
+            Console.WriteLine($"{"Index",-6} | {"Opponent",-12} | {"Result",-6} | {"Rating",-6} | ");
+            Console.WriteLine(new string('-', 55));
+
+            var gamesForUser = gameService.ReadAll()
+                .Where(game => game.AccountId == Id)
+                .ToList();
+
+            foreach (var game in gamesForUser)
             {
-                Console.WriteLine($"| {entry.GameIndex,-11} | {entry.OpponentName,-12} | {entry.Result,-6} | {entry.Rating,-7} |");
+                string opponent = game.OpponentName;
+                string result = game.Result;
+
+                Console.WriteLine($"{game.GameIndex,-6} | {opponent,-12} | {result,-6} | {game.Rating,-6} | ");
             }
 
-            Console.WriteLine("-------------------------------------------------");
-            Console.WriteLine($"Current Rating: {CurrentRating}, Total Games Played: {GameCount}");
+            Console.WriteLine("\nAccount type: " + (this is PremiumGameAccount ? "Premium" : "Base"));
+            Console.WriteLine("Current Rating: " + CurrentRating);
         }
+
 
     }
 }
