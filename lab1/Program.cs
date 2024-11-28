@@ -19,7 +19,8 @@ namespace lab1
             return accounts[index - 1];
         }
 
-   public static void Main(string[] args)
+
+        public static void Main(string[] args)
         {
             DbContext db = new DbContext();
 
@@ -31,6 +32,15 @@ namespace lab1
 
             bool continuePlaying = true;
 
+            var commandDictionary = new Dictionary<string, ICommand>
+            {
+                { "1", new AddPlayerCommand(accountServices) },
+                { "2", new ShowPlayersCommand(accountServices) },
+                { "3", new GetStatsCommand(accountServices, gameServices) },
+                { "4", new PlayGameCommand(accountServices, gameServices) },
+                { "5", new GetStatsGamesCommand(gameServices) }
+            };
+
             while (continuePlaying)
             {
                 Console.WriteLine("\nChoose an option:");
@@ -40,33 +50,29 @@ namespace lab1
                 Console.WriteLine("4. Start a game");
                 Console.WriteLine("5. Get all games statistics");
                 Console.WriteLine("6. Exit");
+                Console.WriteLine("7. Help");
 
                 string input = Console.ReadLine();
 
-                ICommand command = input switch
+                if (input == "6")
                 {
-                    "1" => new AddPlayerCommand(accountServices),
-                    "2" => new ShowPlayersCommand(accountServices),
-                    "3" => new GetStatsCommand(accountServices,gameServices),
-                    "4" => new PlayGameCommand(accountServices, gameServices),
-                    "5" => new GetStatsGamesCommand(gameServices),
-                    "6" => null,
-                    _ => null
-                };
-
-                if (command == null)
-                {
-                    if (input == "6")
-                    {
-                        Console.WriteLine("Goodbye!");
-                        continuePlaying = false;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid option, please try again.");
-                    }
+                    Console.WriteLine("Goodbye!");
+                    continuePlaying = false;
                 }
-                else
+                else if (input == "7")
+                {
+                    ICommand command = new ShowHelp(commandDictionary);
+                    try
+                    {
+                        command.Execute();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"An error occurred: {ex.Message}");
+                    }
+                    
+                }
+                else if (commandDictionary.TryGetValue(input, out ICommand command))
                 {
                     try
                     {
@@ -77,8 +83,12 @@ namespace lab1
                         Console.WriteLine($"An error occurred: {ex.Message}");
                     }
                 }
+                else
+                {
+                    Console.WriteLine("Invalid option, please try again.");
+                }
             }
         }
-        }
-    }
 
+    }
+}

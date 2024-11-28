@@ -3,6 +3,7 @@
 public interface ICommand
 {
     void Execute();
+    string ShowInfo();
 }
 
 public class AddPlayerCommand : ICommand
@@ -40,6 +41,10 @@ public class AddPlayerCommand : ICommand
         _accountServices.AddGameAccount(newAccount);
         Console.WriteLine($"Account for {username} created as {(accountType == 1 ? "Premium" : "Base")}.");
     }
+    public string ShowInfo()
+    {
+        return "Executes a command to add player account.";
+    }
 }
 
 public class ShowPlayersCommand : ICommand
@@ -65,6 +70,10 @@ public class ShowPlayersCommand : ICommand
         {
             Console.WriteLine($"ID: {account.Id}, Username: {account.UserName}, Rating: {account.CurrentRating}");
         }
+    }
+    public string ShowInfo()
+    {
+        return "Executes a command to show players.";
     }
 }
 
@@ -97,6 +106,10 @@ public class GetStatsCommand : ICommand
         }
 
         if (account != null) account.GetStats(_gameServices);
+    }
+    public string ShowInfo()
+    {
+        return "Executes a command to show statistics of player.";
     }
 }
 
@@ -134,6 +147,10 @@ public class PlayGameCommand : ICommand
         Game game = GameFactory.CreateGames(gameType == "Training" ? 2 : 1, player1, player2);
         _gameServices.PlayGame(_gameServices, numberOfGames, game, player1, player2); 
     }
+    public string ShowInfo()
+    {
+        return "Executes a command to play game.";
+    }
 }
 
 public class GetStatsGamesCommand : ICommand
@@ -165,5 +182,34 @@ public class GetStatsGamesCommand : ICommand
             Console.WriteLine(new string('-', 40));
         }
     }
+    public string ShowInfo()
+    {
+        return "Executes a command to show statistics of all games.";
+    }
 }
+
+public class ShowHelp: ICommand
+{
+    private readonly Dictionary<string, ICommand>  _commandDictionary ;
+
+    public ShowHelp(Dictionary<string, ICommand> commandDictionary)
+    {
+        _commandDictionary = commandDictionary;
+    }
+    public void Execute()
+    {
+        Console.WriteLine("\nAvailable commands:");
+        foreach (var command in _commandDictionary)
+        {
+            Console.WriteLine($"{command.Key}: {command.Value.ShowInfo()}");
+        }
+        Console.WriteLine("6: Exit the program");
+
+    }
+    public string ShowInfo()
+    {
+        return "Executes a command to show help.";
+    }
+}
+
 
